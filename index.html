@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<title>رؤية - الأقسام التفاعلية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+        body {
+            background-color: #111;
+            color: gold;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .section-btn {
+    font-size: 22px;
+    padding: 18px 0;
+    width: 100%;
+    border-radius: 12px;
+    margin: 15px auto;
+    
+            background-color: gold;
+            color: #111;
+            padding: 18px 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 24px;
+            margin: 10px auto;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+        }
+        .form-section {
+            display: none;
+            background-color: #222;
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 14px;
+            margin: 5px 0;
+            border-radius: 6px;
+            border: none;
+            font-size: 20px;
+        }
+        .entry {
+            background: #333;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 6px;
+        }
+        .label {
+            margin-top: 10px;
+            display: block;
+            color: #ffc;
+        }
+    
+body {
+    background-color: #000;
+    font-family: 'Cairo', sans-serif;
+}
+
+.section {
+    margin: 20px 0;
+    padding: 12px;
+}
+
+.section div[data-entry="true"] {
+    padding: 18px 14px;
+    font-size: 24px;
+    background: #222;
+    color: gold;
+    margin: 10px 0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section div[data-entry="true"] button {
+    font-size: 22px;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<h1>👁️ برنامج رؤية - الأقسام التفاعلية</h1>
+<button class="section-btn" onclick="toggleSection('menu')">📋 قسم المنيو</button>
+<div class="form-section" id="menu">
+<label class="label">الاسم</label><input id="s_name" type="text"/>
+<label class="label">اسم المطعم</label><input id="s_restaurant" type="text"/>
+<label class="label">رقم الهاتف</label><input id="s_phone" type="text"/>
+<label class="label">البريد الإلكتروني</label><input id="s_email" type="email"/>
+<label class="label">تاريخ التسجيل</label><input id="s_date" type="date"/>
+<label class="label">سعر الاشتراك</label><input id="s_total" type="number"/>
+<label class="label">المدفوع</label><input id="s_paid" type="number"/>
+<label class="label">نوع الاشتراك</label>
+<select id="s_type">
+<option value="شهري">شهري</option>
+<option value="نصف سنوي">نصف سنوي</option>
+<option value="سنوي">سنوي</option>
+</select>
+<button onclick="saveSub()">💾 حفظ الاشتراك</button>
+<div id="menuList"></div>
+</div>
+<button class="section-btn" onclick="toggleSection('packages')">🎁 قسم الباقات</button>
+<div class="form-section" id="packages">
+<label class="label">اسم العميل</label><input id="p_client" type="text"/>
+<label class="label">اسم الباقة</label><input id="p_name" type="text"/>
+<label class="label">سعر الباقة</label><input id="p_total" type="number"/>
+<label class="label">المدفوع</label><input id="p_paid" type="number"/>
+<button onclick="savePackage()">💾 حفظ الباقة</button>
+<div id="packagesList"></div>
+</div>
+<button class="section-btn" onclick="toggleSection('ads')">📢 قسم الإعلانات</button>
+<div class="form-section" id="ads">
+<label class="label">اسم العميل</label><input id="a_client" type="text"/>
+<label class="label">المبلغ المدفوع</label><input id="a_paid" type="number"/>
+<label class="label">المبلغ الممول</label><input id="a_funded" type="number"/>
+<button onclick="saveAd()">💾 حفظ الإعلان</button>
+<div id="adsList"></div>
+</div>
+<button class="section-btn" onclick="toggleSection('affiliate')">🔗 قسم الأفلييت</button>
+<div class="form-section" id="affiliate">
+<label class="label">اسم الشخص</label><input id="af_name" type="text"/>
+<label class="label">المبلغ</label><input id="af_amount" type="number"/>
+<button onclick="saveAffiliate()">💾 حفظ المبلغ</button>
+<div id="affiliateList"></div>
+</div>
+<button class="section-btn" onclick="toggleSection('cpc')">💰 قسم CPC</button>
+<div class="form-section" id="cpc">
+<label class="label">اسم الشخص</label><input id="cpc_name" type="text"/>
+<label class="label">المبلغ</label><input id="cpc_amount" type="number"/>
+<button onclick="saveCPC()">💾 حفظ المبلغ</button>
+<div id="cpcList"></div>
+</div>
+<script>
+    const toggleSection = id => {
+        const section = document.getElementById(id);
+        if (section.style.display === 'block') {
+            section.style.display = 'none';
+        } else {
+            section.style.display = 'block';
+        }
+    }
+
+    let menu = JSON.parse(localStorage.getItem("menu") || "[]");
+    let packages = JSON.parse(localStorage.getItem("packages") || "[]");
+    let ads = JSON.parse(localStorage.getItem("ads") || "[]");
+    let affiliate = JSON.parse(localStorage.getItem("affiliate") || "[]");
+    let cpc = JSON.parse(localStorage.getItem("cpc") || "[]");
+
+    const saveSub = () => {
+        let entry = {
+            name: s_name.value,
+            restaurant: s_restaurant.value,
+            phone: s_phone.value,
+            email: s_email.value,
+            date: s_date.value,
+            total: parseFloat(s_total.value),
+            paid: parseFloat(s_paid.value),
+            type: s_type.value
+        };
+        entry.remaining = entry.total - entry.paid;
+        let end = new Date(entry.date);
+        if (entry.type === "شهري") end.setDate(end.getDate() + 30);
+        else if (entry.type === "نصف سنوي") end.setDate(end.getDate() + 182);
+        else end.setDate(end.getDate() + 365);
+        entry.end = end.toLocaleDateString('ar-EG');
+
+        menu.push(entry);
+        localStorage.setItem("menu", JSON.stringify(menu));
+        showSubs();
+    }
+
+    const savePackage = () => {
+        let entry = {
+            client: p_client.value,
+            name: p_name.value,
+            total: parseFloat(p_total.value),
+            paid: parseFloat(p_paid.value),
+            remaining: parseFloat(p_total.value) - parseFloat(p_paid.value),
+            date: new Date().toLocaleDateString('ar-EG')
+        };
+        packages.push(entry);
+        localStorage.setItem("packages", JSON.stringify(packages));
+        showPackages();
+    }
+
+    const saveAd = () => {
+        let paid = parseFloat(a_paid.value);
+        let funded = parseFloat(a_funded.value);
+        let entry = {
+            client: a_client.value,
+            paid,
+            funded,
+            profit: paid - funded,
+            date: new Date().toLocaleDateString('ar-EG')
+        };
+        ads.push(entry);
+        localStorage.setItem("ads", JSON.stringify(ads));
+        showAds();
+    }
+
+    const saveAffiliate = () => {
+        let entry = {
+            name: af_name.value,
+            amount: parseFloat(af_amount.value),
+            date: new Date().toLocaleDateString('ar-EG')
+        };
+        affiliate.push(entry);
+        localStorage.setItem("affiliate", JSON.stringify(affiliate));
+        showAffiliate();
+    }
+
+    const saveCPC = () => {
+        let entry = {
+            name: cpc_name.value,
+            amount: parseFloat(cpc_amount.value),
+            date: new Date().toLocaleDateString('ar-EG')
+        };
+        cpc.push(entry);
+        localStorage.setItem("cpc", JSON.stringify(cpc));
+        showCPC();
+    }
+
+    const showSubs = () => {
+        menuList.innerHTML = menu.map((s, i) => 
+            `<div class="entry">${s.name} | ${s.restaurant} | ${s.total} | ${s.paid} | باقي: ${s.remaining} | حتى: ${s.end} <button onclick="deleteSub(${i})">❌</button></div>`).join("");
+    }
+    const deleteSub = i => {
+        if (confirm("هل تريد حذف هذا الاشتراك؟")) {
+            menu.splice(i, 1);
+            localStorage.setItem("menu", JSON.stringify(menu));
+            showSubs();
+        }
+    }
+
+    const showPackages = () => {
+        packagesList.innerHTML = packages.map((p, i) => 
+            `<div class="entry">${p.client} | ${p.name} | ${p.total} | ${p.paid} | ${p.remaining} <button onclick="deletePackage(${i})">❌</button></div>`).join("");
+    }
+    const deletePackage = i => {
+        if (confirm("هل تريد حذف هذه الباقة؟")) {
+            packages.splice(i, 1);
+            localStorage.setItem("packages", JSON.stringify(packages));
+            showPackages();
+        }
+    }
+
+    const showAds = () => {
+        adsList.innerHTML = ads.map((a, i) => 
+            `<div class="entry">${a.client} | ${a.paid} | ${a.funded} | ربح: ${a.profit} <button onclick="deleteAd(${i})">❌</button></div>`).join("");
+    }
+    const deleteAd = i => {
+        if (confirm("هل تريد حذف هذا الإعلان؟")) {
+            ads.splice(i, 1);
+            localStorage.setItem("ads", JSON.stringify(ads));
+            showAds();
+        }
+    }
+
+    const showAffiliate = () => {
+        affiliateList.innerHTML = affiliate.map((a, i) => 
+            `<div class="entry">${a.name} | ${a.amount} | ${a.date} <button onclick="deleteAffiliate(${i})">❌</button></div>`).join("");
+    }
+    const deleteAffiliate = i => {
+        if (confirm("هل تريد حذف هذا السجل؟")) {
+            affiliate.splice(i, 1);
+            localStorage.setItem("affiliate", JSON.stringify(affiliate));
+            showAffiliate();
+        }
+    }
+
+    const showCPC = () => {
+        cpcList.innerHTML = cpc.map((a, i) => 
+            `<div class="entry">${a.name} | ${a.amount} | ${a.date} <button onclick="deleteCPC(${i})">❌</button></div>`).join("");
+    }
+    const deleteCPC = i => {
+        if (confirm("هل تريد حذف هذا السجل؟")) {
+            cpc.splice(i, 1);
+            localStorage.setItem("cpc", JSON.stringify(cpc));
+            showCPC();
+        }
+    }
+
+    showSubs();
+    showPackages();
+    showAds();
+    showAffiliate();
+    showCPC();
+</script>
+<script>
+function toggleSection(id) {
+    const section = document.getElementById(id + "Section");
+    if (section.style.display === "none" || section.style.display === "") {
+        section.style.display = "block";
+    } else {
+        section.style.display = "none";
+    }
+}
+</script>
+<script>
+// حفظ كل قسم عند تغييره
+function saveSectionData(id) {
+    const section = document.getElementById(id + "Section");
+    localStorage.setItem(id + "_data", section.innerHTML);
+}
+
+// استرجاع بيانات الأقسام عند التحميل
+window.onload = function() {
+    ['menu', 'packages', 'ads', 'aff', 'cpc'].forEach(function(id) {
+        const saved = localStorage.getItem(id + "_data");
+        const section = document.getElementById(id + "Section");
+        if (saved && section) {
+            section.innerHTML = saved;
+        }
+    });
+};
+
+// تحديث data تلقائيًا عند الضغط على أي زر حفظ داخل القسم
+document.addEventListener("click", function(e) {
+    if (e.target && e.target.matches(".save-btn")) {
+        const section = e.target.closest(".section");
+        if (section && section.id) {
+            const id = section.id.replace("Section", "");
+            saveSectionData(id);
+        }
+    }
+});
+</script>
+</body>
+</html>
