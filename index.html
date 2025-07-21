@@ -2,21 +2,17 @@
 <html dir="rtl" lang="ar">
 <head>
 <meta charset="utf-8"/>
-<title>رؤية - الأقسام التفاعلية</title>
+<title>رؤية - نظام الإدارة المالية</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    * {
-        box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
         background-color: #111;
         color: gold;
         font-family: Arial, sans-serif;
         padding: 20px;
     }
-    h1 {
-        text-align: center;
-    }
+    h1 { text-align: center; }
     .section-btn {
         font-size: 22px;
         padding: 18px 0;
@@ -26,7 +22,6 @@
         background-color: gold;
         color: #111;
         border: none;
-        font-size: 24px;
         display: block;
         cursor: pointer;
     }
@@ -37,7 +32,7 @@
         padding: 15px;
         border-radius: 10px;
     }
-    input, select, button {
+    input, button {
         width: 100%;
         padding: 14px;
         margin: 5px 0;
@@ -81,258 +76,188 @@
   <img src="rooo.png" alt="شعار رؤية" style="width: 160px; max-width: 80%; display: block; margin: 20px auto;">
 </h1>
 
-<!-- الأقسام -->
-
-<button class="section-btn" onclick="toggleSection('menu')">📋 قسم المنيو</button>
-<div class="form-section" id="menu">
-    <label class="label">الاسم</label><input id="s_name" type="text"/>
-    <label class="label">اسم المطعم</label><input id="s_restaurant" type="text"/>
-    <label class="label">رقم الهاتف</label><input id="s_phone" type="text"/>
-    <label class="label">البريد الإلكتروني</label><input id="s_email" type="email"/>
-    <label class="label">تاريخ التسجيل</label><input id="s_date" type="date"/>
-    <label class="label">سعر الاشتراك</label><input id="s_total" type="number"/>
-    <label class="label">المدفوع</label><input id="s_paid" type="number"/>
-    <label class="label">نوع الاشتراك</label>
-    <select id="s_type">
-        <option value="شهري">شهري</option>
-        <option value="نصف سنوي">نصف سنوي</option>
-        <option value="سنوي">سنوي</option>
-    </select>
-    <button onclick="saveSub()">💾 حفظ الاشتراك</button>
-    <div id="menuList"></div>
+<!-- قسم الدخل -->
+<button class="section-btn" onclick="toggleSection('income')">💰 قسم الدخل</button>
+<div class="form-section" id="income">
+    <label class="label">الوصف</label><input id="in_desc" type="text"/>
+    <label class="label">المبلغ</label><input id="in_amount" type="number"/>
+    <button onclick="saveIncome()">💾 حفظ</button>
+    <div id="incomeList"></div>
 </div>
 
-<button class="section-btn" onclick="toggleSection('packages')">🎁 قسم الباقات</button>
-<div class="form-section" id="packages">
-    <label class="label">اسم العميل</label><input id="p_client" type="text"/>
-    <label class="label">اسم الباقة</label><input id="p_name" type="text"/>
-    <label class="label">سعر الباقة</label><input id="p_total" type="number"/>
-    <label class="label">المدفوع</label><input id="p_paid" type="number"/>
-    <button onclick="savePackage()">💾 حفظ الباقة</button>
-    <div id="packagesList"></div>
+<!-- قسم المصروفات -->
+<button class="section-btn" onclick="toggleSection('expenses')">📤 قسم المصروفات</button>
+<div class="form-section" id="expenses">
+    <label class="label">الوصف</label><input id="ex_desc" type="text"/>
+    <label class="label">المبلغ</label><input id="ex_amount" type="number"/>
+    <button onclick="saveExpense()">💾 حفظ</button>
+    <div id="expensesList"></div>
 </div>
 
-<button class="section-btn" onclick="toggleSection('ads')">📢 قسم الإعلانات</button>
-<div class="form-section" id="ads">
-    <label class="label">اسم العميل</label><input id="a_client" type="text"/>
-    <label class="label">المبلغ المدفوع</label><input id="a_paid" type="number"/>
-    <label class="label">المبلغ الممول</label><input id="a_funded" type="number"/>
-    <button onclick="saveAd()">💾 حفظ الإعلان</button>
-    <div id="adsList"></div>
+<!-- قسم الأموال بالخارج -->
+<button class="section-btn" onclick="toggleSection('foreignFunds')">💸 قسم الأموال بالخارج</button>
+<div class="form-section" id="foreignFunds">
+    <label class="label">الوصف</label><input id="ff_desc" type="text"/>
+    <label class="label">المبلغ</label><input id="ff_amount" type="number"/>
+    <button onclick="saveForeignFund()">💾 حفظ</button>
+    <div id="foreignFundsList"></div>
 </div>
 
-<button class="section-btn" onclick="toggleSection('affiliate')">🔗 قسم الأفلييت</button>
-<div class="form-section" id="affiliate">
-    <label class="label">اسم الشخص</label><input id="af_name" type="text"/>
-    <label class="label">المبلغ</label><input id="af_amount" type="number"/>
-    <button onclick="saveAffiliate()">💾 حفظ المبلغ</button>
-    <div id="affiliateList"></div>
+<!-- قسم تقارير الأرباح -->
+<button class="section-btn" onclick="toggleSection('reports')">📊 تقارير الأرباح</button>
+<div class="form-section" id="reports">
+    <div id="reportContent"></div>
 </div>
 
-<button class="section-btn" onclick="toggleSection('cpc')">💰 قسم CPA</button>
-<div class="form-section" id="cpc">
-    <label class="label">اسم الشخص</label><input id="cpc_name" type="text"/>
-    <label class="label">المبلغ</label><input id="cpc_amount" type="number"/>
-    <button onclick="saveCPC()">💾 حفظ المبلغ</button>
-    <div id="cpcList"></div>
+<!-- قسم تقارير الأموال بالخارج -->
+<button class="section-btn" onclick="toggleSection('foreignReports')">🌍 تقارير الأموال بالخارج</button>
+<div class="form-section" id="foreignReports">
+    <div id="foreignReportContent"></div>
+</div>
+
+<!-- قسم إجمالي المصروفات -->
+<button class="section-btn" onclick="toggleSection('totalExpenses')">📦 إجمالي المصروفات</button>
+<div class="form-section" id="totalExpenses">
+    <div id="totalExpensesContent"></div>
 </div>
 
 <script>
     const toggleSection = id => {
         const section = document.getElementById(id);
-        section.style.display = section.style.display === 'block' ? 'none' : 'block';
-    }
-
-    let menu = JSON.parse(localStorage.getItem("menu") || "[]");
-    let packages = JSON.parse(localStorage.getItem("packages") || "[]");
-    let ads = JSON.parse(localStorage.getItem("ads") || "[]");
-    let affiliate = JSON.parse(localStorage.getItem("affiliate") || "[]");
-    let cpc = JSON.parse(localStorage.getItem("cpc") || "[]");
-
-    const saveSub = () => {
-        let entry = {
-            name: s_name.value,
-            restaurant: s_restaurant.value,
-            phone: s_phone.value,
-            email: s_email.value,
-            date: s_date.value,
-            total: parseFloat(s_total.value),
-            paid: parseFloat(s_paid.value),
-            type: s_type.value
-        };
-        entry.remaining = entry.total - entry.paid;
-        let end = new Date(entry.date);
-        if (entry.type === "شهري") end.setDate(end.getDate() + 30);
-        else if (entry.type === "نصف سنوي") end.setDate(end.getDate() + 182);
-        else end.setDate(end.getDate() + 365);
-        entry.end = end.toLocaleDateString('ar-EG');
-        menu.push(entry);
-        localStorage.setItem("menu", JSON.stringify(menu));
-        showSubs();
-    }
-
-    const savePackage = () => {
-        let entry = {
-            client: p_client.value,
-            name: p_name.value,
-            total: parseFloat(p_total.value),
-            paid: parseFloat(p_paid.value),
-            remaining: parseFloat(p_total.value) - parseFloat(p_paid.value),
-            date: new Date().toLocaleDateString('ar-EG')
-        };
-        packages.push(entry);
-        localStorage.setItem("packages", JSON.stringify(packages));
-        showPackages();
-    }
-
-    const saveAd = () => {
-        let paid = parseFloat(a_paid.value);
-        let funded = parseFloat(a_funded.value);
-        let entry = {
-            client: a_client.value,
-            paid,
-            funded,
-            profit: paid - funded,
-            date: new Date().toLocaleDateString('ar-EG')
-        };
-        ads.push(entry);
-        localStorage.setItem("ads", JSON.stringify(ads));
-        showAds();
-    }
-
-    const saveAffiliate = () => {
-        let entry = {
-            name: af_name.value,
-            amount: parseFloat(af_amount.value),
-            date: new Date().toLocaleDateString('ar-EG')
-        };
-        affiliate.push(entry);
-        localStorage.setItem("affiliate", JSON.stringify(affiliate));
-        showAffiliate();
-    }
-
-    const saveCPC = () => {
-        let entry = {
-            name: cpc_name.value,
-            amount: parseFloat(cpc_amount.value),
-            date: new Date().toLocaleDateString('ar-EG')
-        };
-        cpc.push(entry);
-        localStorage.setItem("cpc", JSON.stringify(cpc));
-        showCPC();
-    }
-
-    const showSubs = () => {
-        if (menu.length === 0) return menuList.innerHTML = "<p>لا يوجد اشتراكات حالياً.</p>";
-        menuList.innerHTML = `
-        <table><thead><tr>
-            <th>الاسم</th><th>المطعم</th><th>الاشتراك</th><th>المدفوع</th>
-            <th>المتبقي</th><th>حتى تاريخ</th><th>حذف</th></tr></thead><tbody>
-            ${menu.map((s, i) => `
-                <tr><td>${s.name}</td><td>${s.restaurant}</td><td>${s.total}</td>
-                <td>${s.paid}</td><td>${s.remaining}</td><td>${s.end}</td>
-                <td><button class="delete-btn" onclick="deleteSub(${i})">❌</button></td></tr>
-            `).join("")}
-        </tbody></table>`;
-    }
-
-    const deleteSub = i => {
-        if (confirm("هل تريد حذف هذا الاشتراك؟")) {
-            menu.splice(i, 1);
-            localStorage.setItem("menu", JSON.stringify(menu));
-            showSubs();
+        const isOpen = section.style.display === 'block';
+        document.querySelectorAll('.form-section').forEach(sec => sec.style.display = 'none');
+        if (!isOpen) {
+            section.style.display = 'block';
+            if (id === 'reports') showReport();
+            if (id === 'foreignReports') showForeignReport();
+            if (id === 'totalExpenses') showTotalExpenses();
         }
     }
 
-    const showPackages = () => {
-        if (packages.length === 0) return packagesList.innerHTML = "<p>لا يوجد باقات.</p>";
-        packagesList.innerHTML = `
-        <table><thead><tr>
-            <th>العميل</th><th>الباقة</th><th>السعر</th><th>المدفوع</th>
-            <th>المتبقي</th><th>تاريخ</th><th>حذف</th></tr></thead><tbody>
-            ${packages.map((p, i) => `
-                <tr><td>${p.client}</td><td>${p.name}</td><td>${p.total}</td>
-                <td>${p.paid}</td><td>${p.remaining}</td><td>${p.date}</td>
-                <td><button class="delete-btn" onclick="deletePackage(${i})">❌</button></td></tr>
-            `).join("")}
-        </tbody></table>`;
+    let income = JSON.parse(localStorage.getItem("income") || "[]");
+    let expenses = JSON.parse(localStorage.getItem("expenses") || "[]");
+    let foreignFunds = JSON.parse(localStorage.getItem("foreignFunds") || "[]");
+
+    const saveIncome = () => {
+        let entry = {
+            desc: in_desc.value,
+            amount: parseFloat(in_amount.value),
+            date: new Date().toLocaleDateString('ar-EG')
+        };
+        income.push(entry);
+        localStorage.setItem("income", JSON.stringify(income));
+        showIncome();
     }
 
-    const deletePackage = i => {
-        if (confirm("هل تريد حذف هذه الباقة؟")) {
-            packages.splice(i, 1);
-            localStorage.setItem("packages", JSON.stringify(packages));
-            showPackages();
+    const saveExpense = () => {
+        let entry = {
+            desc: ex_desc.value,
+            amount: parseFloat(ex_amount.value),
+            date: new Date().toLocaleDateString('ar-EG')
+        };
+        expenses.push(entry);
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+        showExpenses();
+    }
+
+    const saveForeignFund = () => {
+        let entry = {
+            desc: ff_desc.value,
+            amount: parseFloat(ff_amount.value),
+            date: new Date().toLocaleDateString('ar-EG')
+        };
+        foreignFunds.push(entry);
+        localStorage.setItem("foreignFunds", JSON.stringify(foreignFunds));
+        showForeignFunds();
+    }
+
+    const showIncome = () => {
+        if (income.length === 0) return incomeList.innerHTML = "<p>لا يوجد دخل مسجل.</p>";
+        incomeList.innerHTML = `
+        <table><thead><tr><th>الوصف</th><th>المبلغ</th><th>التاريخ</th><th>حذف</th></tr></thead><tbody>
+        ${income.map((e, i) => `
+            <tr><td>${e.desc}</td><td>${e.amount}</td><td>${e.date}</td>
+            <td><button class="delete-btn" onclick="deleteIncome(${i})">❌</button></td></tr>
+        `).join("")}</tbody></table>`;
+    }
+
+    const showExpenses = () => {
+        if (expenses.length === 0) return expensesList.innerHTML = "<p>لا يوجد مصروفات.</p>";
+        expensesList.innerHTML = `
+        <table><thead><tr><th>الوصف</th><th>المبلغ</th><th>التاريخ</th><th>حذف</th></tr></thead><tbody>
+        ${expenses.map((e, i) => `
+            <tr><td>${e.desc}</td><td>${e.amount}</td><td>${e.date}</td>
+            <td><button class="delete-btn" onclick="deleteExpense(${i})">❌</button></td></tr>
+        `).join("")}</tbody></table>`;
+    }
+
+    const showForeignFunds = () => {
+        if (foreignFunds.length === 0) return foreignFundsList.innerHTML = "<p>لا يوجد أموال بالخارج.</p>";
+        foreignFundsList.innerHTML = `
+        <table><thead><tr><th>الوصف</th><th>المبلغ</th><th>التاريخ</th><th>حذف</th></tr></thead><tbody>
+        ${foreignFunds.map((e, i) => `
+            <tr><td>${e.desc}</td><td>${e.amount}</td><td>${e.date}</td>
+            <td><button class="delete-btn" onclick="deleteForeignFund(${i})">❌</button></td></tr>
+        `).join("")}</tbody></table>`;
+    }
+
+    const deleteIncome = i => {
+        if (confirm("هل تريد حذف هذا الدخل؟")) {
+            income.splice(i, 1);
+            localStorage.setItem("income", JSON.stringify(income));
+            showIncome();
         }
     }
 
-    const showAds = () => {
-        if (ads.length === 0) return adsList.innerHTML = "<p>لا يوجد إعلانات.</p>";
-        adsList.innerHTML = `
-        <table><thead><tr>
-            <th>العميل</th><th>مدفوع</th><th>ممول</th><th>الربح</th>
-            <th>تاريخ</th><th>حذف</th></tr></thead><tbody>
-            ${ads.map((a, i) => `
-                <tr><td>${a.client}</td><td>${a.paid}</td><td>${a.funded}</td>
-                <td>${a.profit}</td><td>${a.date}</td>
-                <td><button class="delete-btn" onclick="deleteAd(${i})">❌</button></td></tr>
-            `).join("")}
-        </tbody></table>`;
-    }
-
-    const deleteAd = i => {
-        if (confirm("هل تريد حذف هذا الإعلان؟")) {
-            ads.splice(i, 1);
-            localStorage.setItem("ads", JSON.stringify(ads));
-            showAds();
+    const deleteExpense = i => {
+        if (confirm("هل تريد حذف هذه المصروف؟")) {
+            expenses.splice(i, 1);
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+            showExpenses();
         }
     }
 
-    const showAffiliate = () => {
-        if (affiliate.length === 0) return affiliateList.innerHTML = "<p>لا يوجد سجلات أفلييت.</p>";
-        affiliateList.innerHTML = `
-        <table><thead><tr>
-            <th>الاسم</th><th>المبلغ</th><th>تاريخ</th><th>حذف</th></tr></thead><tbody>
-            ${affiliate.map((a, i) => `
-                <tr><td>${a.name}</td><td>${a.amount}</td><td>${a.date}</td>
-                <td><button class="delete-btn" onclick="deleteAffiliate(${i})">❌</button></td></tr>
-            `).join("")}
-        </tbody></table>`;
-    }
-
-    const deleteAffiliate = i => {
+    const deleteForeignFund = i => {
         if (confirm("هل تريد حذف هذا السجل؟")) {
-            affiliate.splice(i, 1);
-            localStorage.setItem("affiliate", JSON.stringify(affiliate));
-            showAffiliate();
+            foreignFunds.splice(i, 1);
+            localStorage.setItem("foreignFunds", JSON.stringify(foreignFunds));
+            showForeignFunds();
         }
     }
 
-    const showCPC = () => {
-        if (cpc.length === 0) return cpcList.innerHTML = "<p>لا يوجد سجلات CPA.</p>";
-        cpcList.innerHTML = `
-        <table><thead><tr>
-            <th>الاسم</th><th>المبلغ</th><th>تاريخ</th><th>حذف</th></tr></thead><tbody>
-            ${cpc.map((a, i) => `
-                <tr><td>${a.name}</td><td>${a.amount}</td><td>${a.date}</td>
-                <td><button class="delete-btn" onclick="deleteCPC(${i})">❌</button></td></tr>
-            `).join("")}
-        </tbody></table>`;
+    const showReport = () => {
+        let totalIncome = income.reduce((sum, e) => sum + e.amount, 0);
+        let totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+        let profit = totalIncome - totalExpenses;
+        reportContent.innerHTML = `
+            <h2>📊 ملخص الأرباح</h2>
+            <p>إجمالي الدخل: <strong>${totalIncome} جنيه</strong></p>
+            <p>إجمالي المصروفات: <strong>${totalExpenses} جنيه</strong></p>
+            <p>صافي الربح: <strong>${profit} جنيه</strong></p>
+        `;
     }
 
-    const deleteCPC = i => {
-        if (confirm("هل تريد حذف هذا السجل؟")) {
-            cpc.splice(i, 1);
-            localStorage.setItem("cpc", JSON.stringify(cpc));
-            showCPC();
-        }
+    const showForeignReport = () => {
+        let total = foreignFunds.reduce((sum, e) => sum + e.amount, 0);
+        foreignReportContent.innerHTML = `
+            <h2>🌍 ملخص الأموال بالخارج</h2>
+            <p>إجمالي الأموال بالخارج: <strong>${total} جنيه</strong></p>
+        `;
     }
 
-    showSubs();
-    showPackages();
-    showAds();
-    showAffiliate();
-    showCPC();
+    const showTotalExpenses = () => {
+        let total = expenses.reduce((sum, e) => sum + e.amount, 0);
+        totalExpensesContent.innerHTML = `
+            <h2>📦 إجمالي المصروفات</h2>
+            <p>إجمالي المصروفات: <strong>${total} جنيه</strong></p>
+        `;
+    }
+
+    // عرض البيانات عند الفتح
+    showIncome();
+    showExpenses();
+    showForeignFunds();
+    showTotalExpenses();
 </script>
 </body>
 </html>
